@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from .services.invoice_service import InvoiceService
 from .models import Invoice
 from .serializers import InvoiceCreateSerializer,InvoiceListSerializer
-
+from io import BytesIO
 import os
 from rest_framework.response import Response
 from django.conf import settings
@@ -22,6 +22,8 @@ from common.pagination import CustomLimitOffsetPagination
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
+from common.responses import success_response
+from common.models import AuditLog
 
 class InvoiceCreateAPIView(APIView):
     
@@ -36,14 +38,22 @@ class InvoiceCreateAPIView(APIView):
             items=serializer.validated_data["items"],
         )
 
-        return Response(
-            {
-                "message": "Invoice created successfully",
-                "invoice_id": invoice.id,
-                "total": invoice.total_amount,
-            },
-            status=201,
+        AuditLog.objects.create(
+            user=request.user,
+            action="Created Invoice",
+            model_name="Invoice",
+            object_id=invoice.id,
+            extra_data={
+                "items_count": len(serializer.validated_data["items"]),
+                "total_amount": str(invoice.total_amount)
+            }
         )
+
+        return success_response(
+            message="Invoice created successfully",
+            data={"invoice_id": invoice.id},
+            status_code=201,
+        ) 
 
 class InvoiceListAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
@@ -54,6 +64,8 @@ class InvoiceListAPIView(ListAPIView):
     filterset_fields = ['customer__id', 'created_at']
     search_fields = ['invoice_number', 'customer__name']
 
+    
+
 class InvoicePDFAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -63,17 +75,10 @@ class InvoicePDFAPIView(APIView):
         except Invoice.DoesNotExist:
             raise Http404("Invoice not found")
 
-        pdf_dir = os.path.join(settings.BASE_DIR, "media", "invoices")
-        os.makedirs(pdf_dir, exist_ok=True)
-
-        file_path = os.path.join(
-            pdf_dir, f"invoice_{invoice.invoice_number}.pdf"
-        )
+        file_dir = os.path.join("invoices", "pdfs")
+        os.makedirs(file_dir, exist_ok=True)
+        file_path = os.path.join(file_dir, f"Invoice_{invoice.invoice_number}.pdf")
 
         generate_invoice_pdf(invoice, file_path)
 
-        return FileResponse(
-            open(file_path, "rb"),
-            content_type="application/pdf",
-            filename=f"invoice_{invoice.invoice_number}.pdf",
-        )
+        return FileResponse(open(file_path, "rb"), as_attachment=True, filename=f"Invoice_{invoice.invoice_number}.pdf")

@@ -1,0 +1,31 @@
+[INFO] 2025-12-27 13:39:07,391 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:41:51,289 autoreload D:\project\inventory_system\invoices\views.py changed, reloading.
+[INFO] 2025-12-27 13:41:52,728 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:42:19,599 autoreload D:\project\inventory_system\invoices\signals.py changed, reloading.
+[INFO] 2025-12-27 13:42:21,183 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:45:23,495 autoreload D:\project\inventory_system\invoices\utils.py changed, reloading.
+[INFO] 2025-12-27 13:45:24,877 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:46:53,596 autoreload D:\project\inventory_system\invoices\views.py changed, reloading.
+[INFO] 2025-12-27 13:46:55,095 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:47:10,160 autoreload D:\project\inventory_system\invoices\utils.py changed, reloading.
+[INFO] 2025-12-27 13:47:11,591 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:47:53,850 autoreload D:\project\inventory_system\invoices\utils.py changed, reloading.
+[INFO] 2025-12-27 13:47:55,283 autoreload Watching for file changes with StatReloader
+[INFO] 2025-12-27 13:48:20,272 autoreload D:\project\inventory_system\invoices\views.py changed, reloading.
+[INFO] 2025-12-27 13:48:21,471 autoreload Watching for file changes with StatReloader
+[WARNING] 2025-12-27 13:49:11,915 log Not Found: /api/reports/12/pdf/
+[WARNING] 2025-12-27 13:49:11,916 log "POST /api/reports/12/pdf/ HTTP/1.1" 404 4005
+[WARNING] 2025-12-27 13:50:09,667 log Method Not Allowed: /api/invoices/5/pdf/
+[WARNING] 2025-12-27 13:50:09,695 log "POST /api/invoices/5/pdf/ HTTP/1.1" 405 95
+[WARNING] 2025-12-27 13:50:14,851 log Not Found: /api/invoices/5/pdf/
+[WARNING] 2025-12-27 13:50:14,852 log "GET /api/invoices/5/pdf/ HTTP/1.1" 404 84
+[ERROR] 2025-12-27 13:50:19,743 log Internal Server Error: /api/invoices/1/pdf/
+[ERROR] 2025-12-27 13:50:19,743 log "GET /api/invoices/1/pdf/ HTTP/1.1" 500 51
+[ERROR] 2025-12-27 13:50:29,289 log Internal Server Error: /api/invoices/2/pdf/
+[ERROR] 2025-12-27 13:50:29,289 log "GET /api/invoices/2/pdf/ HTTP/1.1" 500 51
+[INFO] 2025-12-27 14:47:35,149 autoreload D:\project\inventory_system\invoices\views.py changed, reloading.
+[INFO] 2025-12-27 14:47:36,173 autoreload Watching for file changes with StatReloader
+[WARNING] 2025-12-27 14:47:39,603 log Unauthorized: /api/invoices/2/pdf/
+[WARNING] 2025-12-27 14:47:39,604 log "GET /api/invoices/2/pdf/ HTTP/1.1" 401 226
+[INFO] 2025-12-27 14:47:47,387 log "POST /api/token/ HTTP/1.1" 200 489
+[INFO] 2025-12-27 14:48:13,010 log "GET /api/invoices/2/pdf/ HTTP/1.1" 200 2010

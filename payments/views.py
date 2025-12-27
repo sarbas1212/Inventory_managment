@@ -13,6 +13,8 @@ class PaymentCreateAPIView(CreateAPIView):
     serializer_class = PaymentCreateSerializer
     permission_classes = [IsAuthenticated, IsAdmin | IsStaff]
 
+    
+
 
 
 class PaymentListAPIView(ListAPIView):

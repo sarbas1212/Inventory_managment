@@ -2,6 +2,7 @@ from rest_framework import serializers
 from customers.models import Customer
 from products.models import Product
 from .models import Invoice
+from .services.invoice_service import InvoiceService
 
 class InvoiceItemInputSerializer(serializers.Serializer):
     product = serializers.PrimaryKeyRelatedField(
@@ -19,6 +20,12 @@ class InvoiceCreateSerializer(serializers.Serializer):
         if not items:
             raise serializers.ValidationError("At least one item required")
         return items
+
+    def create(self, validated_data):
+        return InvoiceService.create_invoice(
+            customer=validated_data["customer"],
+            items=validated_data["items"],
+        )
 
 
 

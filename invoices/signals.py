@@ -4,16 +4,25 @@ from .models import InvoiceItem, Invoice
 
 from customers.models import Customer
 from products.models import Product
+from django.db.models import F
+from common.models import AuditLog
 
 @receiver(post_save, sender=InvoiceItem)
 def reduce_stock_on_invoice(sender, instance, created, **kwargs):
     if not created:
         return
 
-
-    product = instance.product
-    product.stock_quantity -= instance.quantity
-    product.save()
+    Product.objects.filter(id=instance.product.id).update(
+        stock_quantity=F("stock_quantity") - instance.quantity
+    )
+    
+    AuditLog.objects.create(
+        user=None,  # or pass request.user via threadlocal if needed
+        action="Stock Reduced",
+        model_name="Product",
+        object_id=instance.product.id,
+        extra_data={"quantity_reduced": instance.quantity}
+    )
 
 
 @receiver(post_save, sender=Invoice)
@@ -21,6 +30,6 @@ def update_customer_balance(sender, instance, created, **kwargs):
     if not created:
         return
 
-    customer = instance.customer
-    customer.opening_balance += instance.total_amount
-    customer.save()
+    Customer.objects.filter(id=instance.customer.id).update(
+        opening_balance=F("opening_balance") + instance.total_amount
+    )

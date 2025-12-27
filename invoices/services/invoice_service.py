@@ -1,15 +1,32 @@
 from django.db import transaction
 from decimal import Decimal
+from rest_framework.exceptions import ValidationError
 
 from invoices.models import Invoice, InvoiceItem
-from products.models import Product
-from customers.models import Customer
+import logging
+logger = logging.getLogger("invoices")
+
 
 class InvoiceService:
 
     @staticmethod
+    def validate_stock(items):
+        for item in items:
+            product = item["product"]
+            quantity = item["quantity"]
+
+            if product.stock_quantity < quantity:
+                raise ValidationError({
+                    "stock": f"Insufficient stock for {product.name}"
+                })
+
+    @staticmethod
     @transaction.atomic
     def create_invoice(*, customer, items):
+        logger.info(f"Creating invoice for customer {customer.id} with {len(items)} items")
+        # ✅ VALIDATE FIRST
+        InvoiceService.validate_stock(items)
+
         subtotal = Decimal("0.00")
 
         invoice = Invoice.objects.create(
@@ -20,8 +37,7 @@ class InvoiceService:
         )
 
         for item in items:
-            product = item["product"]  # ✅ FIX HERE
-
+            product = item["product"]
             quantity = item["quantity"]
             price = product.price
             total = price * quantity
@@ -44,4 +60,5 @@ class InvoiceService:
         invoice.total_amount = total_amount
         invoice.save(update_fields=["subtotal", "tax_amount", "total_amount"])
 
+        logger.info(f"Invoice {invoice.id} created successfully with total {invoice.total_amount}")
         return invoice
