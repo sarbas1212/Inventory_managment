@@ -8,10 +8,11 @@ from rest_framework.permissions import IsAuthenticated
 from invoices.models import Invoice
 from customers.models import Customer
 from products.models import Product
+from common.permissions import IsAdmin, IsStaff
+from common.pagination import CustomLimitOffsetPagination
 
 class SalesReportAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
+    permission_classes = [IsAuthenticated, IsAdmin | IsStaff]
     def get(self, request):
         report = (
             Invoice.objects
@@ -24,7 +25,7 @@ class SalesReportAPIView(APIView):
 
 
 class OutstandingReportAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdmin | IsStaff]
 
     def get(self, request):
         customers = (
@@ -38,7 +39,7 @@ class OutstandingReportAPIView(APIView):
     
 
 class StockReportAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdmin | IsStaff]
 
     def get(self, request):
         threshold = int(request.GET.get("threshold", 5))

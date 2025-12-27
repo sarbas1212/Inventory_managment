@@ -11,4 +11,4 @@ class Payment(models.Model):
     payment_method = models.CharField(max_length=50)
 
     def __str__(self):
-        return f"Payment {self.amount_paid} for {self.invoice.invoice_number}"
+        return f"Payment {self.amount_paid} for {self.invoice.invoice_number}"  

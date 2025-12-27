@@ -4,6 +4,11 @@ from .models import Payment
 from invoices.models import Invoice
 from django.db import models
 
+class PaymentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = "__all__"
+
 class PaymentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment

@@ -45,8 +45,21 @@ INSTALLED_APPS = [
     'invoices.apps.InvoicesConfig',
     'payments.apps.PaymentsConfig',
     'reports',
-    'common',
+    'common.apps.CommonConfig',
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS":
+        "common.pagination.CustomLimitOffsetPagination",
+
+    "DEFAULT_FILTER_BACKENDS": [
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+}
+
+
+REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'] = ['django_filters.rest_framework.DjangoFilterBackend']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -96,9 +109,13 @@ WSGI_APPLICATION = 'inventory_system.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "inventory_managment",
+        "USER": "postgres",
+        "PASSWORD": "admin123",
+        "HOST": "localhost",
+        "PORT": "5432",
     }
 }
 
